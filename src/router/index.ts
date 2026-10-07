@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import DistributionPage from '../views/DistributionPage.vue'
 import LayoutPage from '../views/LayoutPage.vue'
 import PrintPage from '../views/PrintPage.vue'
 import SpecimensPage from '../views/SpecimensPage.vue'
@@ -11,6 +12,7 @@ export const router = createRouter({
     { path: '/layout', component: LayoutPage },
     { path: '/specimens', component: SpecimensPage },
     { path: '/print', component: PrintPage },
+    { path: '/distribution', component: DistributionPage },
     { path: '/templates', component: TemplatesPage },
   ],
 })

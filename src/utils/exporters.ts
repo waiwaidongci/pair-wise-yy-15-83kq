@@ -72,10 +72,10 @@ export function exportTemplateConfig(template: LabelTemplate) {
   )
 }
 
-export async function exportPrintableHtml(
+export async function buildPrintableHtml(
   specimens: Specimen[],
   template: LabelTemplate,
-) {
+): Promise<string> {
   const pages = paginateSpecimens(specimens, template)
   const labelWidth = labelInnerWidth(template)
   const rows = Array.from({ length: pages.length }, (_, pageIndex) =>
@@ -101,7 +101,6 @@ export async function exportPrintableHtml(
     .map(
       (_, pageIndex) => `<section class="sheet">${rows[pageIndex].map((item) => item.html).join('')}</section>`,
     )
-    .join('')
   const html = `<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -159,5 +158,37 @@ html, body { margin: 0; padding: 0; background: #fff; color: #111; font-family: 
       template.barcodeMode,
     )
   }
-  download(templateElement.innerHTML, `${safeFilePart(template.name)}-可打印.html`, 'text/html;charset=utf-8')
+  return templateElement.innerHTML
+}
+
+export async function exportPrintableHtml(
+  specimens: Specimen[],
+  template: LabelTemplate,
+) {
+  const html = await buildPrintableHtml(specimens, template)
+  download(html, `${safeFilePart(template.name)}-可打印.html`, 'text/html;charset=utf-8')
+}
+
+/** 在新窗口打开可打印 HTML 并调用浏览器打印；窗口需在用户手势中同步打开，否则可能被拦截 */
+export async function openPrintableHtml(
+  win: Window | null,
+  specimens: Specimen[],
+  template: LabelTemplate,
+): Promise<boolean> {
+  if (!win) return false
+  win.document.open()
+  win.document.write('<p style="font-family:sans-serif;padding:24px;color:#555;">正在生成标签，请稍候…</p>')
+  const html = await buildPrintableHtml(specimens, template)
+  win.document.open()
+  win.document.write(html)
+  win.document.close()
+  window.setTimeout(() => {
+    try {
+      win.focus()
+      win.print()
+    } catch {
+      /* 打印对话框不可用时忽略 */
+    }
+  }, 600)
+  return true
 }
