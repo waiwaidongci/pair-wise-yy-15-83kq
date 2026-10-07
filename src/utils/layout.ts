@@ -51,3 +51,33 @@ export function barcodeLabel(mode: BarcodeMode) {
 export function safeFilePart(value: string) {
   return value.replace(/[^\w\u4e00-\u9fa5-]+/g, '-').replace(/-+/g, '-')
 }
+
+/** \u6392\u7248\u4f9d\u636e\u7b7e\u540d\uff1a\u4efb\u4f55\u5f71\u54cd\u6210\u54c1\u7684\u7248\u9762\u5b57\u6bb5\u53d8\u5316\u90fd\u4f1a\u5f97\u5230\u4e0d\u540c\u7b7e\u540d */
+export function layoutSignature(template: LabelTemplate) {
+  return JSON.stringify([
+    template.paperWidthMm,
+    template.paperHeightMm,
+    template.marginTopMm,
+    template.marginRightMm,
+    template.marginBottomMm,
+    template.marginLeftMm,
+    template.columns,
+    template.rowHeightMm,
+    template.columnGapMm,
+    template.rowGapMm,
+    template.lineHeightMm,
+    template.fontSizePt,
+    template.borderWidthMm,
+    template.borderStyle,
+    template.italicScientific,
+    template.barcodeMode,
+    template.includeCollection,
+    template.includeHabitat,
+    template.includeNotes,
+  ])
+}
+
+/** \u6e05\u5355\u7b7e\u540d\uff1a\u8bb0\u5f55 id \u7684\u6709\u5e8f\u5e8f\u5217\uff0c\u589e\u5220\u6216\u8c03\u5e8f\u90fd\u4f1a\u53d8\u5316 */
+export function listSignature(specimens: Specimen[]) {
+  return specimens.map((item) => item.id).join('|')
+}

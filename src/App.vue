@@ -7,7 +7,12 @@ import {
   Edit1Icon,
   FileExportIcon,
   PrintIcon,
+  SendIcon,
 } from 'tdesign-icons-vue-next'
+import { useDispatchStore } from './stores/dispatchStore'
+
+// 常驻发放 store：排版依据或清单一改动，未领取批次立即失效重算
+useDispatchStore()
 
 const route = useRoute()
 const router = useRouter()
@@ -15,6 +20,7 @@ const navItems = [
   { path: '/layout', label: '版面编辑', icon: Edit1Icon },
   { path: '/specimens', label: '清单校验', icon: CollectionIcon },
   { path: '/print', label: '打印预览', icon: PrintIcon },
+  { path: '/dispatch', label: '批次发放', icon: SendIcon },
   { path: '/templates', label: '模板库', icon: FileExportIcon },
 ]
 const activePath = computed(() => navItems.find((item) => route.path.startsWith(item.path))?.path ?? '/layout')

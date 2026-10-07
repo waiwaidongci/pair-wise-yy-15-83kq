@@ -174,3 +174,25 @@ button, input, textarea { font: inherit; }
   .page-grid { grid-template-columns: 350px minmax(0, 1fr); }
   .template-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* 批次发放 */
+.dispatch-steps { padding: 16px 18px; border: 1px solid #dfe6dc; border-radius: 10px; background: #fff; }
+.librarian-picker { display: grid; width: 240px; gap: 5px; }
+.librarian-picker > span { color: #89988c; font-size: 10px; }
+.librarian-picker small { color: #9aa89d; font-size: 10px; line-height: 1.5; }
+.dispatch-config { display: grid; gap: 12px; padding: 14px 15px; }
+.dispatch-config__facts { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.dispatch-config__facts article { display: grid; gap: 4px; padding: 11px 12px; border: 1px solid #e3eae2; border-radius: 8px; background: #f7f9f5; }
+.dispatch-config__facts span { color: #82917f; font-size: 10px; }
+.dispatch-config__facts strong { color: #2d4936; font-size: 13px; }
+.dispatch-config__facts small { color: #93a294; font-size: 10px; }
+.section-note { color: #8b998e; font-size: 11px; }
+.cell-sub { display: block; margin-top: 3px; color: #8b998e; font-size: 10px; }
+.occupied-note { color: #a5874a; font-size: 11px; }
+.claim-card { overflow: hidden; }
+.claim-snapshot { display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 11px 15px; border-top: 1px solid #e3e9e1; background: #f6f8f4; }
+.claim-snapshot span { color: #5f7263; font-size: 11px; }
+.print-stage.dispatch-print-stage { min-height: 0; border-radius: 0; }
+@media (max-width: 1350px) {
+  .dispatch-config__facts { grid-template-columns: repeat(3, 1fr); }
+}

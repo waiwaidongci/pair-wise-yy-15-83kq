@@ -1,6 +1,6 @@
 import QRCode from 'qrcode'
 import JsBarcode from 'jsbarcode'
-import type { LabelTemplate, Specimen } from '../types/label'
+import type { LabelTemplate, PrintReceipt, Specimen } from '../types/label'
 import {
   formatDate,
   labelInnerWidth,
@@ -160,4 +160,36 @@ html, body { margin: 0; padding: 0; background: #fff; color: #111; font-family: 
     )
   }
   download(templateElement.innerHTML, `${safeFilePart(template.name)}-可打印.html`, 'text/html;charset=utf-8')
+}
+
+function csvCell(value: string | number) {
+  const text = String(value)
+  return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text
+}
+
+/** 成品回执导出为 CSV，回执本身永久保留在本地 */
+export function exportReceiptsCsv(receipts: PrintReceipt[]) {
+  const header = ['回执编号', '批次', '馆员', '打印时间', '模板', '纸张(mm)', '栏数', '页数', '标签数', '起始编号', '末尾编号']
+  const lines = receipts.map((receipt) =>
+    [
+      receipt.id.slice(0, 8),
+      receipt.batchName,
+      receipt.librarian,
+      new Date(receipt.printedAt).toLocaleString('zh-CN', { hour12: false }),
+      receipt.templateName,
+      `${receipt.paperWidthMm}×${receipt.paperHeightMm}`,
+      receipt.columns,
+      receipt.pageCount,
+      receipt.labelCount,
+      receipt.firstAccession,
+      receipt.lastAccession,
+    ]
+      .map(csvCell)
+      .join(','),
+  )
+  download(
+    '\ufeff' + [header.join(','), ...lines].join('\n'),
+    `成品回执-${safeFilePart(new Date().toISOString().slice(0, 10))}.csv`,
+    'text/csv;charset=utf-8',
+  )
 }
